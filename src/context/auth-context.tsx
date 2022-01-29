@@ -4,7 +4,8 @@ import * as auth from 'auth-provider'
 import { AuthForm, User } from 'interface'
 import { http } from 'utils/http';
 import { useMount } from 'utils';
-
+import { useAsync } from 'utils/use-async';
+import { FullPageErrorFallback, FullPageLoading } from "components/lib"
 
 // 初始化 user 的函数
 
@@ -18,7 +19,7 @@ const bootstrapUser = async () => {
         const data = await http('/me', { token })
         // const data = await fetch('')
         // console.log(data);
-        
+
         user = data.user
     }
 
@@ -39,7 +40,10 @@ AuthContext.displayName = 'AuthContext'
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
-    const [user, setUser] = useState<User | null>(null)
+    const { data: user, setData: setUser, error, isIdle, isError, isLoading, run } = useAsync<User | null>()
+
+
+
 
     // 这里的 login 和 privder 的login 不是一个 login'
     const login = (form: AuthForm) => auth.login(form).then(user => {
@@ -55,11 +59,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     })
 
     useMount(() => {
-        bootstrapUser().then(res => {
-            
-            setUser(res)
-        })
+        run(bootstrapUser())
     })
+
+    if (isIdle || isLoading) {
+        return <FullPageLoading></FullPageLoading>
+    }
+
+    if (isError) {
+        return <FullPageErrorFallback error={error}></FullPageErrorFallback>
+    }
+
 
 
 
