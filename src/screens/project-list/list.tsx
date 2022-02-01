@@ -2,6 +2,7 @@ import { Table } from "antd"
 import dayjs from "dayjs"
 import { ListProps } from "interface"
 import React from "react"
+import { Link } from "react-router-dom"
 
 
 
@@ -9,9 +10,15 @@ export const List = ({ users, ...props }: ListProps) => {
     return (
         <Table rowKey={"id"} pagination={false} columns={[{
             title: '名称',
-            dataIndex: 'name',
             // 根据 名字排序
-            sorter: (a, b) => a.name.localeCompare(b.name)
+            sorter: (a, b) => a.name.localeCompare(b.name),
+
+            render(value, project) {
+                return <div>
+                    <Link to={project.id + ''}>{project.name}</Link>
+                </div>
+            }
+
         }, {
             title: '部门',
             dataIndex: 'organization',

@@ -58,14 +58,20 @@ export const useDocumentTitle = (title: string, keepOnUnmount: boolean = true) =
 
     useEffect(() => {
         document.title = title
-     
+
 
     }, [title])
 
     useEffect(() => {
         if (!keepOnUnmount) {
+            // 如果不指定依赖，读取到的就是旧的 title ，第一次页面加载的 title （闭包导致不会更新 title 的值
             document.title = oldTitle
         }
     }, [])
 
-} 
+}
+
+
+export const reseRoute = () => {
+    window.location.href = window.location.origin
+}

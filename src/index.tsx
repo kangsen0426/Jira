@@ -2,8 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { DevTools,loadServer } from "jira-dev-tool"
+import { DevTools, loadServer } from "jira-dev-tool"
 import 'antd/dist/antd.less'
+import { BrowserRouter } from "react-router-dom"
 
 import { AppProviders } from './context/index'
 
@@ -12,9 +13,11 @@ loadServer(() => ReactDOM.render(
   <React.StrictMode>
     <AppProviders>
       <DevTools />
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </AppProviders>
-   </React.StrictMode>,
+  </React.StrictMode>,
   document.getElementById('root')
 ))
 
