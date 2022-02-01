@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react"
 import { SearchPanel } from "./search-panel"
 import { List } from './list'
-import { useDebounce, useMount, cleanObject, useDocumentTitle } from "utils"
+import { useDebounce, useDocumentTitle } from "utils"
 import styled from "@emotion/styled"
 import { Typography } from "antd"
 import { useProject } from "utils/project"
 import { useUsers } from "utils/user"
+import { useUrlQueryParam } from "utils/url"
+
 
 export const ProjectListScreen = () => {
 
@@ -18,12 +20,15 @@ export const ProjectListScreen = () => {
     })
 
 
+    // const [param, setParam] = useUrlQueryParam(['name', 'personId'])
+
+
 
 
     const debouncedParam = useDebounce(param, 500)
 
     // 请求 列表数据
-    const { isLoading, error, data: list } = useProject(debouncedParam)
+    const { isLoading, error, data: list, retry } = useProject(debouncedParam)
 
 
 
@@ -33,6 +38,11 @@ export const ProjectListScreen = () => {
     useDocumentTitle("项目列表")
 
 
+    // let test = useUrlQueryParam(['name','id'])
+
+    // console.log(test);
+
+
     return (
         <Container>
             <h1>项目列表</h1>
@@ -40,7 +50,7 @@ export const ProjectListScreen = () => {
             {
                 error ? <Typography.Text type={'danger'}>{error.message}</Typography.Text> : null
             }
-            <List loading={isLoading} dataSource={list || []} users={users || []} />
+            <List refresh={retry} loading={isLoading} dataSource={list || []} users={users || []} />
 
 
 

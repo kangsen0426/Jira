@@ -21,6 +21,9 @@ export const http = async (endpoint: string, { data, token, headers, ...customCo
 
     }
 
+    
+    
+
     // 区分 get post 的传参方式
     if (config.method.toUpperCase() === "GET") {
         // 参数拼接在 url 
