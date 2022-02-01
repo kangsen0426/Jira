@@ -9,6 +9,7 @@ import styled from '@emotion/styled'
 import logo from 'assets/logo.svg'
 import leftSvg from 'assets/left.svg'
 import rightSvg from 'assets/right.svg'
+import { useDocumentTitle } from "utils"
 
 
 export const UnauthenticateApp = () => {
@@ -18,6 +19,10 @@ export const UnauthenticateApp = () => {
 
     // 登录异常状态
     const [error, setError] = useState<Error | null>(null)
+
+
+    useDocumentTitle("请登录~")
+    
 
 
     return <Container>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { SearchPanel } from "./search-panel"
 import { List } from './list'
-import { useDebounce, useMount, cleanObject } from "utils"
+import { useDebounce, useMount, cleanObject, useDocumentTitle } from "utils"
 import styled from "@emotion/styled"
 import { Typography } from "antd"
 import { useProject } from "utils/project"
@@ -29,6 +29,8 @@ export const ProjectListScreen = () => {
 
     // 请求 user 数据
     const { data: users } = useUsers()
+
+    useDocumentTitle("项目列表")
 
 
     return (

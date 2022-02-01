@@ -44,6 +44,28 @@ export const useMount = (callback: () => void) => {
         callback();
 
         // TODO  依赖项里加上 callback 会造成无限循环，这个和 useCallbsck 和 useMemo 有关系
-         
+
     }, []);
+
+
+
 };
+
+export const useDocumentTitle = (title: string, keepOnUnmount: boolean = true) => {
+
+    const oldTitle = document.title
+
+
+    useEffect(() => {
+        document.title = title
+     
+
+    }, [title])
+
+    useEffect(() => {
+        if (!keepOnUnmount) {
+            document.title = oldTitle
+        }
+    }, [])
+
+} 
