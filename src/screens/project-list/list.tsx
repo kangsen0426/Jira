@@ -1,4 +1,4 @@
-import { Table } from "antd"
+import { Dropdown, Menu, Table, Button } from "antd"
 import { Pin } from "components/pin"
 import dayjs from "dayjs"
 import { ListProps } from "interface"
@@ -61,7 +61,21 @@ export const List = ({ users, ...props }: ListProps) => {
                         </span>
                     )
                 }
-            },]} {...props}>
+            },
+            {
+                render(value, project) {
+                    return (
+                        <Dropdown overlay={<Menu>
+                            <Menu.Item key={'edit'}>
+                                <Button type="link" onClick={() => props.setProjectModalOpen(true)} >编辑</Button>
+                            </Menu.Item>
+                        </Menu>}>
+                            <Button type="link" onClick={() => props.setProjectModalOpen(true)} >...</Button>
+
+                        </Dropdown>
+                    )
+                }
+            }]} {...props}>
         </Table>
 
     )

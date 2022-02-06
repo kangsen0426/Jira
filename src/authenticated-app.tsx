@@ -1,5 +1,5 @@
 import { useAuth } from "context/auth-context";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { ProjectListScreen } from "screens/project-list";
 import styled from '@emotion/styled'
 import { Row } from 'components/lib'
@@ -11,11 +11,17 @@ import { Navigate, Route, Routes, useNavigate } from "react-router"
 import { BrowserRouter } from "react-router-dom"
 import { ProjectScreen } from "screens/project";
 import { reseRoute } from "utils";
-
+import { ProjectModal } from "screens/project-list/project-modal"
+import { ProjectPopOver } from "components/project-popover";
 // 已登录 的 逻辑
 
 
+
+
 export const AuthenticatedApp = () => {
+    const [projectModalOpen, setProjectModalOpen] = useState(false)
+
+
 
     let navigate = useNavigate();
 
@@ -27,51 +33,60 @@ export const AuthenticatedApp = () => {
 
     }, [])
 
+
     return (
         <Container>
-            <PageHeader></PageHeader>
+            <PageHeader setProjectModalOpen={setProjectModalOpen}></PageHeader>
             <Main>
                 {/* <BrowserRouter> */}
                 <Routes>
-                    <Route path={'/projects'} element={<ProjectListScreen />}></Route>
+                    <Route path={'/projects'} element={<ProjectListScreen setProjectModalOpen={setProjectModalOpen}/>}></Route>
                     <Route path={'/projects/:projectId/*'} element={<ProjectScreen />}></Route>
                 </Routes>
 
                 {/* </BrowserRouter> */}
 
             </Main>
+            <ProjectModal projectModalOpen={projectModalOpen} onClose={() => setProjectModalOpen(false)}></ProjectModal>
         </Container>
     )
 }
 
-const PageHeader = () => {
+const PageHeader = (props: { setProjectModalOpen: (isOpen: boolean) => void }) => {
 
-    const { logout, user } = useAuth()
 
 
     return (
         <Header between={true}>
             <HeaderLeft gap={true} >
-                <Button type="link" onClick={reseRoute}>
+                <Button style={{ padding: 0 }} type="link" onClick={reseRoute}>
                     <SoftwareLogo width={'18rem'} color={'rgb(38,132,255)'} />
                 </Button>
-                <h3>Logo</h3>
-                <h3>Logo</h3>
+                <ProjectPopOver setProjectModalOpen={props.setProjectModalOpen} />
+                <span>Logo</span>
             </HeaderLeft>
             <HeaderRight>
-                <Dropdown overlay={
-                    <Menu>
-                        <Menu.Item key={'logout'}>
-                            <Button type="link" onClick={logout}>登出</Button>
-                        </Menu.Item>
-                    </Menu>
-                }>
-                    <Button type="link" onClick={e => e.preventDefault()}>
-                        Hi, {user?.name}
-                    </Button>
-                </Dropdown>
+                <User />
             </HeaderRight>
         </Header>
+    )
+}
+
+const User = () => {
+    const { logout, user } = useAuth()
+
+    return (
+        <Dropdown overlay={
+            <Menu>
+                <Menu.Item key={'logout'}>
+                    <Button type="link" onClick={logout}>登出</Button>
+                </Menu.Item>
+            </Menu>
+        }>
+            <Button type="link" onClick={e => e.preventDefault()}>
+                Hi, {user?.name}
+            </Button>
+        </Dropdown>
     )
 }
 

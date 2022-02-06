@@ -43,7 +43,8 @@ export interface Project {
 
 export interface ListProps extends TableProps<Project> {
     users: User[],
-    refresh?: () => void
+    refresh?: () => void,
+    setProjectModalOpen: (isOpen: boolean) => void
 }
 
 

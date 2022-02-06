@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 
 
@@ -74,4 +74,19 @@ export const useDocumentTitle = (title: string, keepOnUnmount: boolean = true) =
 
 export const reseRoute = () => {
     window.location.href = window.location.origin
+}
+
+export const useMountedRef = () => {
+
+    const mountedRef = useRef(false)
+
+    useEffect(() => {
+        mountedRef.current = true;
+
+        return () => {
+            mountedRef.current = false
+        }
+    })
+
+    return mountedRef
 }

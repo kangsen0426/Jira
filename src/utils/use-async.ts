@@ -1,5 +1,6 @@
 import { State, defaultConfig } from "interface"
 import { useState } from "react"
+import { useMountedRef } from "utils"
 
 
 const defaultInitialState: State<null> = {
@@ -16,6 +17,8 @@ export const useAsync = <D>(initialState?: State<D>, initiaConfig?: defaultConfi
         ...defaultInitialState,
         ...initialState
     })
+
+    const mountedRef = useMountedRef()
 
     const [retry, setRetry] = useState(() => () => {
 
@@ -54,8 +57,8 @@ export const useAsync = <D>(initialState?: State<D>, initiaConfig?: defaultConfi
         return promise.then(data => {
 
 
-
-            setData(data)
+            if (mountedRef.current)
+                setData(data)
             // console.log("**", data);
 
             return data
